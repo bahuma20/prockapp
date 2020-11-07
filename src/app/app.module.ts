@@ -7,13 +7,19 @@ import 'hammerjs';
 import {FormListComponent} from './form-list/form-list.component';
 import {FormDetailComponent} from './form-detail/form-detail.component';
 import {AppRoutingModule} from './app-routing.module';
-import {MatSidenavModule, MatToolbarModule} from '@angular/material';
+import {MatSidenavModule, MatSnackBarModule, MatToolbarModule} from '@angular/material';
+import {FormStoreService} from './form-store.service';
+import {AuthService} from './auth.service';
+import { LoginComponent } from './login/login.component';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     FormListComponent,
     FormDetailComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,8 +28,14 @@ import {MatSidenavModule, MatToolbarModule} from '@angular/material';
     AppRoutingModule,
     MatSidenavModule,
     MatToolbarModule,
+    FormsModule,
+    HttpClientModule,
+    MatSnackBarModule
   ],
-  providers: [],
+  providers: [
+    FormStoreService,
+    AuthService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

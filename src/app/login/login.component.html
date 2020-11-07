@@ -1,0 +1,13 @@
+<h1>Login</h1>
+
+<form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="submit($event)">
+  <mat-form-field>
+    <input matInput placeholder="E-Mail" type="email" name="email" [(ngModel)]="email">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Passwort" type="password" name="password" [(ngModel)]="password">
+  </mat-form-field>
+
+  <button mat-raised-button color="primary">Einloggen</button>
+</form>
