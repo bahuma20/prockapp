@@ -1,0 +1,23 @@
+<div
+  fxLayout="row wrap"
+  fxLayoutGap="32px"
+  fxLayoutAlign="flex-start">
+  <mat-card
+    *ngFor="let form of forms"
+    routerLink="form/{{form.id}}"
+    fxFlex="0 1 calc(33.3% - 32px)"
+    fxFlex.lt-md="0 1 calc(50% - 32px)">
+
+    <mat-card-header
+      fxLayout="row"
+      fxLayoutAlign="center center">
+      <mat-icon style="width: 60px; height: 60px; font-size: 60px">description</mat-icon>
+    </mat-card-header>
+
+    <br>
+
+    <mat-card-title>{{form.title}}</mat-card-title>
+
+  </mat-card>
+</div>
+

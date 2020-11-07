@@ -1,0 +1,19 @@
+<mat-drawer-container class="app__content">
+  <mat-drawer
+    #appDrawer></mat-drawer>
+
+  <mat-drawer-content class="app__main-content">
+    <mat-toolbar color="primary" class="app__main-toolbar">
+      <button mat-icon-button aria-label="Home" *ngIf="router.routerState.snapshot.url !== '/'" routerLink="">
+        <mat-icon>home</mat-icon>
+      </button>
+      <span>Prock App</span>
+    </mat-toolbar>
+
+    <main class="app__main-content-inner" #mainContentInner>
+      <section class="app__content-area">
+        <router-outlet></router-outlet>
+      </section>
+    </main>
+  </mat-drawer-content>
+</mat-drawer-container>
