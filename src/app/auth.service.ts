@@ -54,7 +54,9 @@ export class AuthService {
           key: 'auth_password',
         }),
       ]).then(values => {
-        const [email, password] = values;
+        console.log(values);
+        const email = values[0].value;
+        const password = values[1].value;
 
         this.http.post('http://localhost:3001/user/login', {
           data: {

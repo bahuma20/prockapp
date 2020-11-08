@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormStoreService} from '../form-store.service';
 
 @Component({
   selector: 'app-form-list',
@@ -17,9 +18,12 @@ export class FormListComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private formStore: FormStoreService) { }
 
   ngOnInit(): void {
   }
 
+  sync() {
+    this.formStore.sync();
+  }
 }
