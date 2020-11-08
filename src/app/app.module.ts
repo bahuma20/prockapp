@@ -14,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {AppConfigModule} from './app-config.module';
+import {SyncComponent} from './sync/sync.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {AppConfigModule} from './app-config.module';
     FormListComponent,
     FormDetailComponent,
     LoginComponent,
+    SyncComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,7 @@ import {AppConfigModule} from './app-config.module';
     FormsModule,
     HttpClientModule,
     MatSnackBarModule,
-    AppConfigModule
+    AppConfigModule,
   ],
   providers: [
     FormStoreService,

@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {AuthService} from './auth.service';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Plugins, StoragePlugin} from '@capacitor/core';
 import {Observable} from 'rxjs';
 import Submission from './model/Submission';
@@ -10,9 +10,11 @@ import {APP_CONFIG, AppConfig} from './app-config.module';
   providedIn: 'root'
 })
 export class FormStoreService {
-  public forms: Array<object>;
+  public forms: object[] = [];
 
-  public submissions: Array<object>;
+  public submissions: Submission[] = [];
+  public failedSubmissions: Submission[] = [];
+  public uploadRunning = false;
 
   storage: StoragePlugin;
 
@@ -21,21 +23,14 @@ export class FormStoreService {
 
     this.getForms()
       .subscribe(forms => this.forms = forms);
+
+    this.getSubmissions()
+      .subscribe(submissions => this.submissions = submissions);
   }
 
   sync() {
-    this.auth.authenticate()
-      .subscribe(() => {
-        this.syncForms();
-
-        // this.http.post(this.config.apiEndpoint + '/regiebericht/submission', {
-        //   data: {
-        //     reporttext: 'Text from sync',
-        //   }
-        // }).subscribe(data => {
-        //   console.log(data)
-        // })
-      })
+    this.syncForms();
+    this.syncSubmissions();
   }
 
   storeSubmission(submission: Submission): Observable<any> {
@@ -56,6 +51,7 @@ export class FormStoreService {
           value: JSON.stringify(submissions),
         });
       }).then(data => {
+        this.submissions.push(submission);
         observer.next();
       }).catch(error => {
         observer.error(error);
@@ -65,7 +61,6 @@ export class FormStoreService {
   }
 
   storeForms(forms: Array<any>): Observable<any> {
-    console.log(forms);
     return new Observable<any>(observer => {
       const data = {};
 
@@ -130,14 +125,94 @@ export class FormStoreService {
   }
 
   private syncForms() {
-    this.http.get<Array<object>>(this.config.apiEndpoint + '/form?tags=prockapp').subscribe(data => {
-      this.storeForms(data)
-        .subscribe(success => {
-          console.log('success');
-          this.getForms().subscribe(forms => this.forms = forms);
-        }, error => {
-          console.error('error')
+    this.auth.getJwt()
+      .subscribe(jwt => {
+        this.http.get<Array<object>>(this.config.apiEndpoint + '/form?tags=prockapp', {
+          headers: new HttpHeaders({
+            'x-jwt-token': jwt,
+          })
+        }).subscribe(data => {
+          this.storeForms(data)
+            .subscribe(success => {
+              this.getForms().subscribe(forms => this.forms = forms);
+            }, error => {
+              console.error('error')
+            });
         });
+      });
+  }
+
+  private syncSubmissions() {
+    if (this.submissions.length > 0) {
+      this.uploadRunning = true;
+      this.uploadSubmission();
+    }
+  }
+
+  private uploadSubmission() {
+    const submission = this.submissions.pop();
+
+    this.auth.getJwt().subscribe(jwt => {
+      this.http.post(this.config.apiEndpoint + '/' + submission.formPath + '/submission', submission.submission, {
+        headers: new HttpHeaders({
+          'x-jwt-token': jwt,
+        })
+      }).subscribe(data => {
+        if (this.submissions.length === 0) {
+          this.submissions = this.failedSubmissions;
+          this.failedSubmissions = [];
+          this.uploadRunning = false;
+          this.storeSubmissions(this.submissions)
+            .subscribe();
+        } else {
+          this.uploadSubmission()
+        }
+      }, error => {
+        this.failedSubmissions.push(submission);
+
+        if (this.submissions.length === 0) {
+          this.submissions = this.failedSubmissions;
+          this.failedSubmissions = [];
+          this.uploadRunning = false;
+          this.storeSubmissions(this.submissions).subscribe();
+        } else {
+          this.uploadSubmission();
+        }
+      })
+    }, error => {
+      console.error(error);
+    })
+  }
+
+  getSubmissions(): Observable<Submission[]> {
+    return new Observable<Submission[]>(observer => {
+      this.storage.get({
+        key: 'submissions',
+      }).then(data => {
+        if (!data.value) {
+          data.value = '[]';
+        }
+
+        const submissions = JSON.parse(data.value);
+
+        observer.next(submissions);
+      }).catch(error => {
+        console.error(error);
+        observer.error(error);
+      });
+    })
+  }
+
+  private storeSubmissions(submissions: Submission[]) {
+    return new Observable(observer => {
+      this.storage.set({
+        key: 'submissions',
+        value: JSON.stringify(submissions),
+      }).then(() => {
+        observer.next();
+      }).catch(error => {
+        observer.error(error);
+      });
     });
   }
 }
