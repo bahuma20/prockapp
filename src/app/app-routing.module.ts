@@ -10,7 +10,7 @@ const routes: Routes = [
     component: FormListComponent
   },
   {
-    path: 'form/:id',
+    path: 'form/:path',
     component: FormDetailComponent
   },
   {

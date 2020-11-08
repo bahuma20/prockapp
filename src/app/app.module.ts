@@ -13,6 +13,7 @@ import {AuthService} from './auth.service';
 import { LoginComponent } from './login/login.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {AppConfigModule} from './app-config.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {HttpClientModule} from '@angular/common/http';
     MatToolbarModule,
     FormsModule,
     HttpClientModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AppConfigModule
   ],
   providers: [
     FormStoreService,

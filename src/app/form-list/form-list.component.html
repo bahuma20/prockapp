@@ -5,8 +5,8 @@
   fxLayoutGap="32px"
   fxLayoutAlign="flex-start">
   <mat-card
-    *ngFor="let form of forms"
-    routerLink="form/{{form.id}}"
+    *ngFor="let form of formStore.forms"
+    routerLink="form/{{form.path}}"
     fxFlex="0 1 calc(33.3% - 32px)"
     fxFlex.lt-md="0 1 calc(50% - 32px)">
 

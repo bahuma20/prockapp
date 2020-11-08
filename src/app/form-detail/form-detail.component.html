@@ -1,3 +1,5 @@
-<p>form-detail works!</p>
+<div *ngIf="form">
+  <h2>{{form.title}}</h2>
 
-<mat-formio [form]="form" (submit)="onSubmit($event)"></mat-formio>
+  <mat-formio [form]="form" (submit)="onSubmit($event)"></mat-formio>
+</div>

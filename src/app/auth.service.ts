@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Plugins, StoragePlugin} from '@capacitor/core';
+import {APP_CONFIG, AppConfig} from './app-config.module';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,13 @@ export class AuthService {
 
   storage: StoragePlugin;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, @Inject(APP_CONFIG) private config: AppConfig) {
     this.storage = Plugins.Storage;
   }
 
   login(email: string, password: string): Observable<any> {
     return new Observable<any>(observer => {
-      this.http.post('http://localhost:3001/user/login', {
+      this.http.post(this.config.apiEndpoint + '/user/login', {
         data: {
           email,
           password
@@ -58,7 +59,7 @@ export class AuthService {
         const email = values[0].value;
         const password = values[1].value;
 
-        this.http.post('http://localhost:3001/user/login', {
+        this.http.post(this.config.apiEndpoint + '/user/login', {
           data: {
             email,
             password
