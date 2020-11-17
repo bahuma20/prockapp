@@ -1,5 +1,17 @@
-<button mat-raised-button (click)="formStore.sync()">Sync</button>
+<mat-card>
+  <button mat-raised-button color="accent" (click)="formStore.sync()" [disabled]="formStore.uploadRunning || !isConnected">
+    <mat-icon>sync</mat-icon> Daten übertragen
+  </button>
 
-{{formStore.submissions.length}} Submissions müssen synchronisiert werden.
+  <mat-spinner mode="indeterminate" [diameter]="20" *ngIf="formStore.uploadRunning" style="display: inline-block"></mat-spinner>
 
-<mat-spinner mode="indeterminate" [diameter]="20" *ngIf="formStore.uploadRunning"></mat-spinner>
+  <p *ngIf="!isConnected">Verbinden Sie das Gerät mit dem WLAN um die Daten übertragen zu können</p>
+
+  <p *ngIf="formStore.submissions.length > 0">
+  <span [ngPlural]="formStore.submissions.length">
+    <ng-template ngPluralCase="=1">1 Eintrag muss</ng-template>
+    <ng-template ngPluralCase="other">{{formStore.submissions.length}} Einträge müssen</ng-template>
+  </span> noch übertragen werden.
+  </p>
+</mat-card>
+

@@ -3,7 +3,7 @@
   "appName": "Prock App",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "www",
+  "webDir": "dist/prockapp",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0

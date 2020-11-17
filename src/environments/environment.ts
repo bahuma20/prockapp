@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'http://prock.apps.bahuma.io:3001',
+  apiEndpoint: 'https://formio.prock.apps.bahuma.io',
 };
 
 /*

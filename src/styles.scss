@@ -13,7 +13,7 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $prockapp-primary: mat-palette($mat-indigo);
-$prockapp-accent: mat-palette($mat-pink, A200, A100, A400);
+$prockapp-accent: mat-palette($mat-lime);
 
 // The warn palette is optional (defaults to red).
 $prockapp-warn: mat-palette($mat-red);

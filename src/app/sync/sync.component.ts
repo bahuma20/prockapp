@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormStoreService} from '../form-store.service';
+import {ConnectionService} from 'ng-connection-service';
 
 @Component({
   selector: 'app-sync',
@@ -8,9 +9,22 @@ import {FormStoreService} from '../form-store.service';
 })
 export class SyncComponent implements OnInit {
 
-  constructor(public formStore: FormStoreService) { }
+  status = 'ONLINE';
+  isConnected = true;
+
+  constructor(public formStore: FormStoreService, private connectionService: ConnectionService) {
+
+  }
 
   ngOnInit() {
+    this.connectionService.monitor().subscribe(isConnected => {
+      this.isConnected = isConnected;
+      if (this.isConnected) {
+        this.status = 'ONLINE';
+      } else  {
+        this.status = 'OFFLINE';
+      }
+    })
   }
 
 }
