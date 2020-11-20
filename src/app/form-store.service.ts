@@ -6,6 +6,7 @@ import {Observable} from 'rxjs';
 import Submission from './model/Submission';
 import {APP_CONFIG, AppConfig} from './app-config.module';
 import {MatSnackBar} from '@angular/material';
+import {formatDate} from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,10 @@ export class FormStoreService {
 
   storage: StoragePlugin;
 
-  constructor(private auth: AuthService, private http: HttpClient, @Inject(APP_CONFIG) private config: AppConfig, private snackBar: MatSnackBar) {
+  constructor(private auth: AuthService,
+              private http: HttpClient,
+              @Inject(APP_CONFIG) private config: AppConfig,
+              private snackBar: MatSnackBar) {
     this.storage = Plugins.Storage;
 
     this.getForms()
@@ -140,7 +144,7 @@ export class FormStoreService {
             .subscribe(success => {
               this.getForms().subscribe(forms => this.forms = forms);
             }, error => {
-              console.error('error')
+              console.error(error)
             });
         });
       });
@@ -156,8 +160,13 @@ export class FormStoreService {
   private uploadSubmission() {
     const submission = this.submissions.pop();
 
+    const createdDate = formatDate(submission.created, 'yyyy-MM-ddTHH:mm:ssZ', 'en');
+
+    const submissionData = submission.submission;
+    submissionData.data.created = createdDate;
+
     this.auth.getJwt().subscribe(jwt => {
-      this.http.post(this.config.apiEndpoint + '/' + submission.formPath + '/submission', submission.submission, {
+      this.http.post(this.config.apiEndpoint + '/' + submission.formPath + '/submission', submissionData, {
         headers: new HttpHeaders({
           'x-jwt-token': jwt,
         })
