@@ -171,30 +171,32 @@ export class FormStoreService {
           'x-jwt-token': jwt,
         })
       }).subscribe(data => {
-        if (this.submissions.length === 0) {
-          this.submissions = this.failedSubmissions;
-          this.failedSubmissions = [];
-          this.uploadRunning = false;
-          this.storeSubmissions(this.submissions)
-            .subscribe();
-        } else {
-          this.uploadSubmission()
-        }
+        this.uploadFinished();
       }, error => {
         this.failedSubmissions.push(submission);
-
-        if (this.submissions.length === 0) {
-          this.submissions = this.failedSubmissions;
-          this.failedSubmissions = [];
-          this.uploadRunning = false;
-          this.storeSubmissions(this.submissions).subscribe();
-        } else {
-          this.uploadSubmission();
-        }
+        this.uploadFinished();
       })
     }, error => {
       console.error(error);
     })
+  }
+
+  uploadFinished() {
+    if (this.submissions.length === 0) {
+      let message = 'Übertragung abgeschlossen.';
+      if (this.failedSubmissions.length > 0) {
+        message += ' Bei ' + this.failedSubmissions.length + ' ' + (this.failedSubmissions.length === 1 ? 'Eintrag' : 'Einträgen') + ' ist ein Fehler aufgetreten!'
+      }
+
+      this.submissions = this.failedSubmissions;
+      this.failedSubmissions = [];
+      this.uploadRunning = false;
+      this.storeSubmissions(this.submissions).subscribe();
+
+      this.snackBar.open(message);
+    } else {
+      this.uploadSubmission();
+    }
   }
 
   getSubmissions(): Observable<Submission[]> {
