@@ -1,3 +1,17 @@
+# Building the android app
+1. `ng build --prod`
+2. `npx cap add android`
+3. `npx cap copy`
+4. `npx cap open android`
+5. Right click on `app/res/mipmap`
+6. New > ImageAsset 
+7. Source Asset > Path > Browse > Select the icon from `resources/icon.png`
+8. Resize > 55%
+9. Background Layer > Color > #FFFFFF
+10. Next > Finish
+11. Build project in Android Studio
+12. The apk is located in `android/app/build/outputs/apk/debug/apk-debug.apk`
+
 # AngularMaterialFormio
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
