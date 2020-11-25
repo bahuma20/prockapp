@@ -13,18 +13,25 @@ export class SyncComponent implements OnInit {
   isConnected = true;
 
   constructor(public formStore: FormStoreService, private connectionService: ConnectionService) {
-
-  }
-
-  ngOnInit() {
     this.connectionService.monitor().subscribe(isConnected => {
       this.isConnected = isConnected;
       if (this.isConnected) {
         this.status = 'ONLINE';
-      } else  {
+      }
+      else {
         this.status = 'OFFLINE';
       }
     })
+  }
+
+  ngOnInit() {
+    this.isConnected = navigator.onLine;
+    if (this.isConnected) {
+      this.status = 'ONLINE';
+    }
+    else {
+      this.status = 'OFFLINE';
+    }
   }
 
 }
