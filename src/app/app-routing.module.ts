@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import {FormListComponent} from './form-list/form-list.component';
 import {FormDetailComponent} from './form-detail/form-detail.component';
 import {LoginComponent} from './login/login.component';
+import {FormSubmissionsComponent} from './form-submissions/form-submissions.component';
+import {FormSigningComponent} from "./form-signing/form-signing.component";
 
 const routes: Routes = [
   {
@@ -11,7 +13,15 @@ const routes: Routes = [
   },
   {
     path: 'form/:path',
+    component: FormSubmissionsComponent
+  },
+  {
+    path: 'form/:path/create',
     component: FormDetailComponent
+  },
+  {
+    path: 'form/:path/sign/:uuid',
+    component: FormSigningComponent
   },
   {
     path: 'login',

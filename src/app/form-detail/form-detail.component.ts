@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormStoreService} from '../form-store.service';
-import {Observable} from 'rxjs';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
+import * as uuid from 'uuid';
+import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-form-detail',
@@ -12,6 +12,7 @@ import {MatSnackBar} from '@angular/material';
 })
 export class FormDetailComponent implements OnInit {
   form: any;
+  displayedForm: any;
 
   constructor(private formStore: FormStoreService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
@@ -20,22 +21,25 @@ export class FormDetailComponent implements OnInit {
       this.formStore.getForm(params.get('path'))
         .subscribe(form => {
           this.form = form;
+          this.updateDisplayedForm();
         });
     })
   }
 
   onSubmit(submission) {
     console.log(submission);
+    submission.data.created = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ssZ', 'en');
+
     this.formStore.storeSubmission({
-      created: new Date(),
       formId: this.form._id,
       formPath: this.form.path,
-      submission
+      submission,
+      uuid: uuid.v4(),
     }).subscribe(value => {
       this.snackBar.open('Formular wurde gespeichert', null, {
         duration: 5000
       });
-      this.router.navigateByUrl('');
+      this.router.navigateByUrl('/form/' + this.form.path);
     }, error => {
       console.error(error)
       this.snackBar.open('Beim Speichern ist ein Fehler aufgetreten. Starten Sie die App neu.', null, {
@@ -44,4 +48,13 @@ export class FormDetailComponent implements OnInit {
     })
   }
 
+  private updateDisplayedForm() {
+    const displayedForm = this.form;
+
+    displayedForm.components = displayedForm.components.filter(item => {
+      return item.tags.indexOf('signing') === -1;
+    });
+
+    this.displayedForm = displayedForm;
+  }
 }

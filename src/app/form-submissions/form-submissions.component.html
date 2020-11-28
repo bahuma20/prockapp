@@ -1,0 +1,29 @@
+<h2>{{form?.title}}</h2>
+
+<table mat-table [dataSource]="submissions$" class="mat-elevation-z8" style="width: 100%" *ngIf="submissions$.value.length > 0">
+
+  <ng-container matColumnDef="{{column.key}}" *ngFor="let column of columns">
+    <th mat-header-cell *matHeaderCellDef> {{valueFormatter.formatLabel(form, column.key)}} </th>
+    <td mat-cell *matCellDef="let element"> {{valueFormatter.formatValue(form, column.key, element.submission.data[column.key])}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button aria-label="Unterschreiben" routerLink="/form/{{form.path}}/sign/{{element.uuid}}" *ngIf="form.tags.indexOf('signing') !== -1 && !element.submission.data.signed">
+        <mat-icon>history_edu</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns$.value"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns$.value;"></tr>
+</table>
+
+<div *ngIf="submissions$.value.length === 0">
+  Es gibt noch keine Einträge für dieses Formular. Über den Plus-Button können Sie einen neuen Eintrag hinzufügen.
+</div>
+
+<button mat-fab color="accent" aria-label="Add" routerLink="/form/{{form?.path}}/create" style="position: fixed; bottom: 20px; right: 20px;">
+  <mat-icon>add</mat-icon>
+</button>

@@ -1,6 +1,6 @@
 export default interface Submission {
+  uuid: string,
   submission: any,
-  created: Date,
   formId: string,
   formPath: string,
 }

@@ -12,10 +12,11 @@ import {formatDate} from '@angular/common';
   providedIn: 'root'
 })
 export class FormStoreService {
-  public forms: object[] = [];
+  public forms = [];
 
   public submissions: Submission[] = [];
   public failedSubmissions: Submission[] = [];
+  public unsignedSubmissions: Submission[] = [];
   public uploadRunning = false;
 
   storage: StoragePlugin;
@@ -160,46 +161,74 @@ export class FormStoreService {
   private uploadSubmission() {
     const submission = this.submissions.pop();
 
-    const createdDate = formatDate(submission.created, 'yyyy-MM-ddTHH:mm:ssZ', 'en');
-
     const submissionData = submission.submission;
-    submissionData.data.created = createdDate;
 
     this.auth.getJwt().subscribe(jwt => {
-      this.http.post(this.config.apiEndpoint + '/' + submission.formPath + '/submission', submissionData, {
-        headers: new HttpHeaders({
-          'x-jwt-token': jwt,
+      let request;
+
+      if (submissionData._id) {
+        request = this.http.put(this.config.apiEndpoint + '/' + submission.formPath + '/submission/' + submissionData._id, {
+          data: submissionData.data
+        }, {
+          headers: new HttpHeaders({
+            'x-jwt-token': jwt,
+          })
         })
-      }).subscribe(data => {
-        this.uploadFinished();
+      } else {
+        request = this.http.post(this.config.apiEndpoint + '/' + submission.formPath + '/submission', submissionData, {
+          headers: new HttpHeaders({
+            'x-jwt-token': jwt,
+          })
+        })
+      }
+
+      request.subscribe(data => {
+        if (submissionData.data.signed === false) {
+          submission.submission = data;
+          submission.uuid = submission.submission._id;
+          this.unsignedSubmissions.push(submission);
+        }
+        this.submissionUploadFinished();
       }, error => {
+        console.error(error);
         this.failedSubmissions.push(submission);
-        this.uploadFinished();
-      })
+        this.submissionUploadFinished();
+      });
     }, error => {
       console.error(error);
     })
   }
 
-  uploadFinished() {
-    if (this.submissions.length === 0) {
-      let message = 'Übertragung abgeschlossen.';
-      if (this.failedSubmissions.length > 0) {
-        message += ' Bei ' + this.failedSubmissions.length + ' ' + (this.failedSubmissions.length === 1 ? 'Eintrag' : 'Einträgen') + ' ist ein Fehler aufgetreten!'
-      }
-
-      this.submissions = this.failedSubmissions;
-      this.failedSubmissions = [];
-      this.uploadRunning = false;
-      this.storeSubmissions(this.submissions).subscribe();
-
-      this.snackBar.open(message);
-    } else {
+  submissionUploadFinished() {
+    if (this.submissions.length > 0) {
       this.uploadSubmission();
+      return;
     }
+
+    let message = 'Übertragung abgeschlossen.';
+    if (this.failedSubmissions.length > 0) {
+      message += ' Bei ' + this.failedSubmissions.length + ' ' + (this.failedSubmissions.length === 1 ? 'Eintrag' : 'Einträgen') + ' ist ein Fehler aufgetreten!'
+    }
+
+    this.submissions = this.failedSubmissions;
+    this.failedSubmissions = [];
+
+    this.submissions.push(...this.unsignedSubmissions);
+    this.unsignedSubmissions = [];
+
+    this.uploadRunning = false;
+
+    this.storeSubmissions(this.submissions).subscribe(data => {
+      // this.downloadUnsignedSubmissions()
+      //   .subscribe(data => {
+      this.snackBar.open(message);
+      // });
+    });
+
+    this.snackBar.open(message);
   }
 
-  getSubmissions(): Observable<Submission[]> {
+  getSubmissions(form: string = null): Observable<Submission[]> {
     return new Observable<Submission[]>(observer => {
       this.storage.get({
         key: 'submissions',
@@ -208,7 +237,13 @@ export class FormStoreService {
           data.value = '[]';
         }
 
-        const submissions = JSON.parse(data.value);
+        let submissions: Submission[] = JSON.parse(data.value);
+
+        if (form) {
+          submissions = submissions.filter(item => {
+            return item.formId === form;
+          });
+        }
 
         observer.next(submissions);
       }).catch(error => {
@@ -230,4 +265,87 @@ export class FormStoreService {
       });
     });
   }
+
+  getSubmissionByUuid(uuid: string): Submission|false {
+    const results = this.submissions.filter(item => {
+      return item.uuid === uuid;
+    });
+
+    if (results.length === 0) {
+      return false;
+    }
+
+    return results[0];
+  }
+
+  updateSubmission(uuid: string, submission: Submission) {
+    return new Observable(observer => {
+      let submissionKey;
+      let i = 0;
+      this.submissions.forEach(item => {
+        if (item.uuid === uuid) {
+          submissionKey = i;
+        }
+
+        i++;
+      });
+
+      if (submissionKey === undefined) {
+        observer.error('No submission with this uuid found');
+        return;
+      }
+
+      this.submissions[submissionKey] = submission;
+
+      this.storeSubmissions(this.submissions)
+        .subscribe(data => {
+          observer.next();
+        }, error => {
+          observer.error(error);
+        })
+    });
+  }
+
+  // public downloadUnsignedSubmissions() {
+  //   return new Observable(observer => {
+  //     this.auth.getJwt().subscribe(jwt => {
+  //       const promises = [];
+  //
+  //       this.forms.forEach(form => {
+  //         promises.push(this.http.get(this.config.apiEndpoint + '/' + form.path + '/submission?data.signed=false', {
+  //           headers: new HttpHeaders({
+  //             'x-jwt-token': jwt,
+  //           })
+  //         }).toPromise());
+  //       });
+  //
+  //       Promise.all(promises)
+  //         .then(datas => {
+  //           const submissions = [].concat(...datas);
+  //
+  //           submissions.forEach(submission => {
+  //             const storedSubmission = this.getSubmissionByUuid(submission._id);
+  //             if (storedSubmission) {
+  //               storedSubmission.submission = submission
+  //               this.updateSubmission(submission._id, storedSubmission).subscribe();
+  //             } else {
+  //               const pathName = submission.metadata.pathName;
+  //               const parts = pathName.split('/');
+  //               const formPath = parts[parts.length - 1];
+  //               const newSubmission: Submission = {
+  //                 submission,
+  //                 uuid: submission._id,
+  //                 formId: submission.form,
+  //                 formPath,
+  //               };
+  //
+  //               this.storeSubmission(newSubmission).subscribe();
+  //             }
+  //           });
+  //
+  //           observer.next();
+  //         })
+  //     });
+  //   });
+  // }
 }

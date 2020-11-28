@@ -1,0 +1,10 @@
+<h2>{{form?.title}}</h2>
+
+<div class="summary">
+  <div class="field" *ngFor="let field of displayedFields">
+    <div class="label">{{field.label}}</div>
+    <div class="value" [innerHTML]="field.value"></div>
+  </div>
+</div>
+
+<mat-formio [form]="signingForm" (submit)="onSubmit($event)"></mat-formio>
