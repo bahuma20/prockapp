@@ -1,0 +1,5 @@
+<div *ngIf="form && submission">
+  <h2>{{form.title}}</h2>
+
+  <mat-formio [form]="form" [submission]="submission.submission" (submit)="onSubmit($event)"></mat-formio>
+</div>

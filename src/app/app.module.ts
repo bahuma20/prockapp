@@ -15,9 +15,10 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {AppConfigModule} from './app-config.module';
 import {SyncComponent} from './sync/sync.component';
-import {FormSubmissionsComponent} from "./form-submissions/form-submissions.component";
-import {MatTableModule} from "@angular/material/table";
-import {FormSigningComponent} from "./form-signing/form-signing.component";
+import {FormSubmissionsComponent} from './form-submissions/form-submissions.component';
+import {MatTableModule} from '@angular/material/table';
+import {FormSigningComponent} from './form-signing/form-signing.component';
+import {FormEditComponent} from './form-edit/form-edit.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {FormSigningComponent} from "./form-signing/form-signing.component";
     FormDetailComponent,
     FormSubmissionsComponent,
     FormSigningComponent,
+    FormEditComponent,
     LoginComponent,
     SyncComponent,
   ],
