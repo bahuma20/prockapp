@@ -12,6 +12,12 @@
 11. Build project in Android Studio
 12. The apk is located in `android/app/build/outputs/apk/debug/apk-debug.apk`
 
+# Building the Windows App
+1. `ng build --prod`
+3. `npx cap copy`
+4. `npm run-script build-electron`
+5. The exe is located in `electron/out/ProckApp-win32-x64`
+
 # AngularMaterialFormio
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
