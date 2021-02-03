@@ -3,7 +3,20 @@
 <div class="summary">
   <div class="field" *ngFor="let field of displayedFields">
     <div class="label">{{field.label}}</div>
-    <div class="value" [innerHTML]="field.value"></div>
+    <table *ngIf="field.rawComponent.type === 'datagrid'" class="datagrid">
+      <thead>
+        <tr>
+          <th *ngFor="let component of field.rawComponent.components">{{component.label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of field.rawValue">
+          <td *ngFor="let component of field.rawComponent.components">{{row[component.key]}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="value" [innerHTML]="field.value" *ngIf="field.rawComponent.type !== 'datagrid'"></div>
   </div>
 </div>
 

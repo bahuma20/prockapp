@@ -15,3 +15,21 @@
   margin-bottom: 2em;
   border-bottom: solid 1px #ddd;
 }
+
+
+$border-color: #aaa;
+
+.datagrid {
+  border: solid 1px $border-color;
+  border-collapse: collapse;
+
+  tr {
+    border: solid 1px $border-color;
+  }
+
+  td, th {
+    border: solid 1px $border-color;
+    text-align: left;
+    padding: 5px 10px;
+  }
+}

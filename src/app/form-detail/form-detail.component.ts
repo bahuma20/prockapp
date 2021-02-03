@@ -52,6 +52,10 @@ export class FormDetailComponent implements OnInit {
     const displayedForm = this.form;
 
     displayedForm.components = displayedForm.components.filter(item => {
+      if (!item.tags) {
+        return true;
+      }
+
       return item.tags.indexOf('signing') === -1;
     });
 

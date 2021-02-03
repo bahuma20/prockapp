@@ -9,6 +9,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 interface Field {
   label: string,
   value: string,
+  rawComponent: any,
+  rawValue: any,
 }
 
 @Component({
@@ -51,14 +53,22 @@ export class FormSigningComponent implements OnInit {
 
   updateDisplayedFields() {
     const components = this.form.components.filter(item => {
+      if (!item.tags) {
+        return true;
+      }
+
       return item.tags.indexOf('signing') === -1 && item.tags.indexOf('pdfHidden') === -1;
     });
 
     components.forEach(component => {
-      this.displayedFields.push({
+      const field: Field = {
         label: this.valueFormatter.formatLabel(this.form, component.key),
-        value: this.valueFormatter.formatValue(this.form, component.key, this.submission.submission.data[component.key])
-      });
+        value: this.valueFormatter.formatValue(this.form, component.key, this.submission.submission.data[component.key]),
+        rawComponent: component,
+        rawValue: this.submission.submission.data[component.key],
+      };
+
+      this.displayedFields.push(field);
     });
   }
 
