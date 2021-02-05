@@ -136,7 +136,9 @@ export class FormStoreService {
   private syncForms() {
     this.auth.getJwt()
       .subscribe(jwt => {
-        this.http.get<Array<object>>(this.config.apiEndpoint + '/form?tags=prockapp', {
+        const tags = this.config.formTags.join(',');
+
+        this.http.get<Array<object>>(this.config.apiEndpoint + '/form?tags__in=' + tags, {
           headers: new HttpHeaders({
             'x-jwt-token': jwt,
           })

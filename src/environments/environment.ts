@@ -5,6 +5,10 @@
 export const environment = {
   production: false,
   apiEndpoint: 'https://formio.prock.apps.bahuma.io',
+  formTags: [
+    'prockapp',
+    'prockappdev',
+  ]
 };
 
 /*
