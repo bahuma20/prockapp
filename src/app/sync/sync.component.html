@@ -7,11 +7,18 @@
 
   <p *ngIf="!isConnected">Verbinden Sie das Gerät mit dem WLAN um die Daten übertragen zu können</p>
 
-  <p *ngIf="formStore.submissions.length > 0">
-  <span [ngPlural]="formStore.submissions.length">
+  <p *ngIf="signedCount(this.forms, formStore.submissions) > 0">
+  <span [ngPlural]="signedCount(this.forms, formStore.submissions)">
     <ng-template ngPluralCase="=1">1 Eintrag muss</ng-template>
-    <ng-template ngPluralCase="other">{{formStore.submissions.length}} Einträge müssen</ng-template>
+    <ng-template ngPluralCase="other">{{signedCount(this.forms, formStore.submissions)}} Einträge müssen</ng-template>
   </span> noch übertragen werden.
+  </p>
+
+  <p *ngIf="unsignedCount(this.forms, formStore.submissions) > 0">
+  <span [ngPlural]="unsignedCount(this.forms, formStore.submissions)">
+    <ng-template ngPluralCase="=1">1 Eintrag muss</ng-template>
+    <ng-template ngPluralCase="other">{{unsignedCount(this.forms, formStore.submissions)}} Einträge müssen</ng-template>
+  </span> noch unterschrieben werden.
   </p>
 </mat-card>
 

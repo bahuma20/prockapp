@@ -11,7 +11,7 @@
     <th mat-header-cell *matHeaderCellDef> Aktionen </th>
     <td mat-cell *matCellDef="let element">
       <button mat-icon-button aria-label="Unterschreiben" routerLink="/form/{{form.path}}/sign/{{element.uuid}}" *ngIf="form.tags.indexOf('signing') !== -1 && !element.submission.data.signed">
-        <mat-icon>history_edu</mat-icon>
+        <mat-icon>check_circle</mat-icon>
       </button>
 
       <button mat-icon-button aria-label="Bearbeiten" routerLink="/form/{{form.path}}/edit/{{element.uuid}}" *ngIf="(form.tags.indexOf('signing') !== -1 && !element.submission.data.signed) || form.tags.indexOf('signing') == -1">

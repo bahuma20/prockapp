@@ -185,12 +185,14 @@ export class FormStoreService {
       }
 
       request.subscribe(data => {
-        if (submissionData.data.signed === false) {
-          submission.submission = data;
-          submission.uuid = submission.submission._id;
-          this.unsignedSubmissions.push(submission);
-        }
-        this.submissionUploadFinished();
+        this.getForm(submission.formPath).subscribe(form => {
+          if (form.tags.indexOf('signing') !== -1 && submissionData.data.signed === false) {
+            submission.submission = data;
+            submission.uuid = submission.submission._id;
+            this.unsignedSubmissions.push(submission);
+          }
+          this.submissionUploadFinished();
+        });
       }, error => {
         console.error(error);
         this.failedSubmissions.push(submission);
@@ -305,6 +307,16 @@ export class FormStoreService {
         }, error => {
           observer.error(error);
         })
+    });
+  }
+
+  public getUnsignedSubmissions(forms: any[], submissions: Submission[]) {
+    return submissions.filter(item => {
+      const filteredForms = forms.filter(formItem => {
+        return formItem._id === item.formId;
+      });
+
+      return filteredForms[0].tags.indexOf('signing') !== -1 && item.submission.data.signed === false;
     });
   }
 
