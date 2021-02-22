@@ -33,3 +33,7 @@ $border-color: #aaa;
     padding: 5px 10px;
   }
 }
+
+:host ::ng-deep mat-formio-signature {
+  width: 500px;
+}
