@@ -51,7 +51,7 @@ export class FormEditComponent implements OnInit {
     const displayedForm = this.form;
 
     displayedForm.components = displayedForm.components.filter(item => {
-      return item.tags.indexOf('signing') === -1;
+      return item.tags ? item.tags.indexOf('signing') === -1 : true;
     });
 
     this.displayedForm = displayedForm;

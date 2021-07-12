@@ -19,6 +19,8 @@ import {FormSubmissionsComponent} from './form-submissions/form-submissions.comp
 import {MatTableModule} from '@angular/material/table';
 import {FormSigningComponent} from './form-signing/form-signing.component';
 import {FormEditComponent} from './form-edit/form-edit.component';
+import {AufmassComponent} from "./aufmass/aufmass.component";
+import {AufmassPositionComponent} from './aufmass/aufmass-position/aufmass-position.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import {FormEditComponent} from './form-edit/form-edit.component';
     FormEditComponent,
     LoginComponent,
     SyncComponent,
+    AufmassComponent,
+    AufmassPositionComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +52,9 @@ import {FormEditComponent} from './form-edit/form-edit.component';
     FormStoreService,
     AuthService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    AufmassComponent,
+  ]
 })
 export class AppModule { }

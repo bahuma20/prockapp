@@ -1,0 +1,59 @@
+<table mat-table [dataSource]="value.rows" multiTemplateDataRows class="mat-elevation-z3">
+  <!-- Position Column -->
+  <ng-container matColumnDef="label">
+    <th mat-header-cell *matHeaderCellDef> Label </th>
+    <td mat-cell *matCellDef="let element"> {{element.label}} </td>
+    <td mat-footer-cell *matFooterCellDef> Reiner Messgehalt: </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="count">
+    <th mat-header-cell *matHeaderCellDef> Count </th>
+    <td mat-cell *matCellDef="let element"> {{element.count}}<span *ngIf="element.count">x</span> </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="dimensions">
+    <th mat-header-cell *matHeaderCellDef> Dimensions </th>
+    <td mat-cell *matCellDef="let element"> {{formatDimensions(element.dimensions)}} </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="messgehalt">
+    <th mat-header-cell *matHeaderCellDef> Messgehalt </th>
+    <td mat-cell *matCellDef="let element" [ngClass]="{'is-negative': calculateRow(element) < 0 }"> {{calculateRow(element)|number: '1.2-2'}} </td>
+    <td mat-footer-cell *matFooterCellDef>{{sumRows()|number: '1.2-2'}}</td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+      <div class="example-element-detail"
+           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <p>I bims expanded</p>
+<!--        <div class="example-element-diagram">-->
+<!--          <div class="example-element-position"> {{element.position}} </div>-->
+<!--          <div class="example-element-symbol"> {{element.symbol}} </div>-->
+<!--          <div class="example-element-name"> {{element.name}} </div>-->
+<!--          <div class="example-element-weight"> {{element.weight}} </div>-->
+<!--        </div>-->
+<!--        <div class="example-element-description">-->
+<!--          {{element.description}}-->
+<!--          <span class="example-element-description-attribution"> &#45;&#45; Wikipedia </span>-->
+<!--        </div>-->
+      </div>
+    </td>
+  </ng-container>
+
+<!--  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>-->
+
+  <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"
+      class="example-element-row"
+      [class.example-expanded-row]="expandedElement === row"
+      (click)="expandedElement = expandedElement === row ? null : row"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+  <tr mat-footer-row *matFooterRowDef="columnsToDisplay"></tr>
+</table>
