@@ -23,8 +23,11 @@
   <!-- Symbol Column -->
   <ng-container matColumnDef="messgehalt">
     <th mat-header-cell *matHeaderCellDef> Messgehalt </th>
-    <td mat-cell *matCellDef="let element" [ngClass]="{'is-negative': calculateRow(element) < 0 }"> {{calculateRow(element)|number: '1.2-2'}} </td>
-    <td mat-footer-cell *matFooterCellDef>{{sumRows()|number: '1.2-2'}}</td>
+    <td mat-cell *matCellDef="let element" [ngClass]="{'is-negative': calculateRow(element) < 0, 'is-error': hasError(element) }">
+      {{calculateRow(element)|number:'1.2-2':'de-DE'}}
+      <span *ngIf="hasError(element)">Fehler</span>
+    </td>
+    <td mat-footer-cell *matFooterCellDef>{{sumRows()|number: '1.2-2':'de-DE'}}</td>
   </ng-container>
 
 
@@ -32,7 +35,7 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
       <div class="example-element-detail"
            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-        <p>I bims expanded</p>
+        <app-aufmass-row-edit [(row)]="element"></app-aufmass-row-edit>
 <!--        <div class="example-element-diagram">-->
 <!--          <div class="example-element-position"> {{element.position}} </div>-->
 <!--          <div class="example-element-symbol"> {{element.symbol}} </div>-->

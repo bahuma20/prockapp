@@ -1,0 +1,28 @@
+<mat-form-field appearance="fill" class="form-field">
+  <mat-label>Bezeichnung</mat-label>
+  <input matInput
+         [value]="row.label"
+         (input)="row.label = $event.target.value; rowChange.emit(row)"
+         autocomplete="false">
+</mat-form-field>
+
+<mat-form-field appearance="fill" class="form-field">
+  <mat-label>Anzahl</mat-label>
+  <input type="number"
+         matInput [value]="row.count?.toString()"
+         (input)="row.count = +$event.target.value == 0 ? null : +$event.target.value; rowChange.emit(row)"
+         autocomplete="false">
+</mat-form-field>
+
+<mat-form-field appearance="fill" class="form-field">
+  <mat-label>Abmessungen</mat-label>
+  <input matInput [value]="row.dimensions" (input)="onDimensionsChanged($event)" autocomplete="false">
+</mat-form-field>
+
+<mat-radio-group aria-label="Mode"
+                 class="radio-group"
+                 [value]="row.type"
+                 (change)="this.row.type = $event.value; this.rowChange.emit(this.row)">
+  <mat-radio-button value="add" class="radio-button">Aufschlag</mat-radio-button>
+  <mat-radio-button value="subtract" class="radio-button">Abzug</mat-radio-button>
+</mat-radio-group>

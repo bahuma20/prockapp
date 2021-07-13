@@ -11,7 +11,7 @@ import {MatSidenavModule, MatSnackBarModule, MatToolbarModule} from '@angular/ma
 import {FormStoreService} from './form-store.service';
 import {AuthService} from './auth.service';
 import { LoginComponent } from './login/login.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {AppConfigModule} from './app-config.module';
 import {SyncComponent} from './sync/sync.component';
@@ -19,8 +19,11 @@ import {FormSubmissionsComponent} from './form-submissions/form-submissions.comp
 import {MatTableModule} from '@angular/material/table';
 import {FormSigningComponent} from './form-signing/form-signing.component';
 import {FormEditComponent} from './form-edit/form-edit.component';
-import {AufmassComponent} from "./aufmass/aufmass.component";
+import {AufmassComponent} from './aufmass/aufmass.component';
 import {AufmassPositionComponent} from './aufmass/aufmass-position/aufmass-position.component';
+import { AufmassRowEditComponent } from './aufmass/aufmass-row-edit/aufmass-row-edit.component';
+import {registerLocaleData} from '@angular/common';
+import localeDe from '@angular/common/locales/de';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,7 @@ import {AufmassPositionComponent} from './aufmass/aufmass-position/aufmass-posit
     SyncComponent,
     AufmassComponent,
     AufmassPositionComponent,
+    AufmassRowEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +51,7 @@ import {AufmassPositionComponent} from './aufmass/aufmass-position/aufmass-posit
     HttpClientModule,
     MatSnackBarModule,
     AppConfigModule,
+    ReactiveFormsModule,
   ],
   providers: [
     FormStoreService,
@@ -58,3 +63,5 @@ import {AufmassPositionComponent} from './aufmass/aufmass-position/aufmass-posit
   ]
 })
 export class AppModule { }
+
+registerLocaleData(localeDe);

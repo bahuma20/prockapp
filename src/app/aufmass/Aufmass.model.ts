@@ -1,7 +1,7 @@
 export interface AufmassRow {
   label?: string,
   count?: number,
-  type?: 'add' | 'substract',
+  type?: 'add' | 'subtract',
   dimensions?: string,
 }
 

@@ -30,7 +30,7 @@ export class AufmassComponent extends MaterialComponent {
             count: 2,
             label: 'Fenster',
             dimensions: '2.4*4',
-            type: 'substract',
+            type: 'subtract',
           },
         ]
       },

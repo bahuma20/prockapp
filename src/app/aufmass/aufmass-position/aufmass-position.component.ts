@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AufmassPosition, AufmassRow} from '../Aufmass.model';
 import * as math from 'mathjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { formatDimensions } from '../shared';
 
 @Component({
   selector: 'app-aufmass-position',
@@ -31,11 +32,20 @@ export class AufmassPositionComponent implements OnInit {
 
   calculateRow(element: AufmassRow): number|null {
     if (element.dimensions) {
-      let result = math.evaluate(element.dimensions);
+      let result: number;
+      try {
+         result = math.evaluate(element.dimensions);
+      } catch (error) {
+        return null;
+      }
+
+      if (result === Infinity) {
+        return null;
+      }
 
       result = element.count * result;
 
-      if (element.type === 'substract') {
+      if (element.type === 'subtract') {
         result = 0 - result;
       }
 
@@ -61,20 +71,10 @@ export class AufmassPositionComponent implements OnInit {
   }
 
   formatDimensions(dimensions: string): string {
-    if (!dimensions) {
-      return '';
-    }
+    return formatDimensions(dimensions);
+  }
 
-    const allowedPunctuation = '+-*/()';
-
-    allowedPunctuation.split('').forEach(item => {
-      // @ts-ignore
-      dimensions = dimensions.replaceAll(item, ' '+item+' ');
-    })
-
-    // @ts-ignore
-    dimensions = dimensions.replaceAll('  ', ' ');
-
-    return dimensions;
+  hasError(row: AufmassRow) {
+    return row.dimensions !== null && row.dimensions !== '' && this.calculateRow(row) === null
   }
 }

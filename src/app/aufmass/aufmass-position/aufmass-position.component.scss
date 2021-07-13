@@ -25,7 +25,6 @@ tr.example-element-row:not(.example-expanded-row):active {
 
 .example-element-detail {
   overflow: hidden;
-  display: flex;
 }
 
 [mat-footer-cell] {
@@ -37,5 +36,10 @@ tr.example-element-row:not(.example-expanded-row):active {
 
   &.is-negative {
     color: red;
+  }
+
+  &.is-error {
+    color: red;
+    font-style: italic;
   }
 }
