@@ -1,58 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, OnInit} from '@angular/core';
 import {MaterialComponent, registerComponent} from 'angular-material-formio';
-import {Aufmass} from './Aufmass.model';
+import {Aufmass, AufmassPosition} from './Aufmass.model';
+import {throws} from 'assert';
 
 @Component({
   selector: 'app-aufmass',
   templateUrl: './aufmass.component.html',
   styleUrls: ['./aufmass.component.scss'],
 })
-export class AufmassComponent extends MaterialComponent {
+export class AufmassComponent extends MaterialComponent implements OnInit {
 
-  value: Aufmass = {
-    unit: 'm²',
-    positions: [
-      {
-        rows: [
-          {
-            count: null,
-            label: 'Wohnzimmer',
-            dimensions: null,
-            type: null,
-          },
-          {
-            count: 4,
-            label: 'Wände',
-            dimensions: '12*5.8+(5-2.2*2)',
-            type: 'add',
-          },
-          {
-            count: 2,
-            label: 'Fenster',
-            dimensions: '2.4*4',
-            type: 'subtract',
-          },
-        ]
-      },
-      {
-        rows: [
-          {
-            count: null,
-            label: 'Schlafzimmer',
-            dimensions: null,
-            type: null,
-          },
-        ]
+  // value: Aufmass = null;
+
+  value: Aufmass = null
+
+
+  ngOnInit() {
+    super.ngOnInit();
+    this.control.valueChanges.subscribe((data: Aufmass | null) => {
+      if (this.value === null) {
+        if (data === null) {
+          data = {
+            unit: 'm²',
+            positions: [
+              {
+                rows: [
+                  {
+                    label: null,
+                    type: 'add',
+                    dimensions: '',
+                  }
+                ]
+              }
+            ]
+          }
+        }
+
+        this.value = data;
       }
-    ]
-  }
-
-  rows = []
-
-  test() {
-    console.log('bla');
-    this.control.setValue('12345');
-    super.onChange();
+    })
   }
 
   addPosition() {
@@ -64,11 +50,18 @@ export class AufmassComponent extends MaterialComponent {
           type: 'add',
         }
       ]
-    })
+    });
+    this.valueChanged();
   }
 
   removePosition(index: number) {
     this.value.positions.splice(index, 1);
+    this.valueChanged();
+  }
+
+  valueChanged() {
+    this.control.setValue(this.value);
+    super.onChange();
   }
 }
 

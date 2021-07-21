@@ -1,11 +1,12 @@
-<div *ngFor="let position of value.positions; let i = index">
-  <div class="position-actions">
-    <button mat-button (click)="removePosition(i)"><mat-icon>delete_outline</mat-icon> Position löschen</button>
+<div *ngIf="value">
+  <div *ngFor="let position of value.positions; let i = index">
+    <div class="position-actions">
+      <button mat-button (click)="removePosition(i)"><mat-icon>delete_outline</mat-icon> Position löschen</button>
+    </div>
+    <div class="position-nr">Position {{(i+1).toString().padStart(3, '0')}}:</div>
+    <app-aufmass-position [value]="position" (valueChange)="position = $event; valueChanged()"></app-aufmass-position>
+    <mat-divider></mat-divider>
   </div>
-  <div class="position-nr">Position {{(i+1).toString().padStart(3, '0')}}:</div>
-  <app-aufmass-position [value]="position"></app-aufmass-position>
-  <mat-divider></mat-divider>
+
+  <button mat-raised-button color="accent" (click)="addPosition()"><mat-icon>add</mat-icon> Position hinzufügen</button>
 </div>
-
-<button mat-raised-button color="accent" (click)="addPosition()"><mat-icon>add</mat-icon> Position hinzufügen</button>
-

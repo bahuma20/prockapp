@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {AufmassPosition, AufmassRow} from '../Aufmass.model';
 import * as math from 'mathjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';
@@ -19,8 +19,9 @@ import {MatTable} from '@angular/material/table';
 })
 export class AufmassPositionComponent implements OnInit {
 
-  @Input()
-  value: AufmassPosition
+  @Input() value!: AufmassPosition;
+
+  @Output() valueChange = new EventEmitter<AufmassPosition>();
 
   columnsToDisplay = ['label', 'count', 'dimensions', 'messgehalt', 'actions'];
 
@@ -90,11 +91,17 @@ export class AufmassPositionComponent implements OnInit {
     this.value.rows.push(newRow);
     this.expandedElement = newRow;
     this.table.renderRows();
+    this.onChange();
   }
 
   deleteRow(i) {
     this.value.rows.splice(i, 1);
     this.expandedElement = null;
     this.table.renderRows();
+    this.onChange();
+  }
+
+  onChange() {
+    this.valueChange.emit(this.value);
   }
 }

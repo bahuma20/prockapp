@@ -1,7 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AufmassRow} from '../Aufmass.model';
-import {MatRadioChange} from '@angular/material/radio';
-import {formatDimensions} from '../shared';
 
 @Component({
   selector: 'app-aufmass-row-edit',
