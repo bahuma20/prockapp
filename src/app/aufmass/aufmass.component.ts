@@ -66,6 +66,10 @@ export class AufmassComponent extends MaterialComponent {
       ]
     })
   }
+
+  removePosition(index: number) {
+    this.value.positions.splice(index, 1);
+  }
 }
 
 registerComponent('aufmass', AufmassComponent);

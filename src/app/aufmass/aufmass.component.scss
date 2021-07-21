@@ -2,11 +2,18 @@ app-aufmass-position {
   display: block;
 }
 
-app-aufmass-position {
-  margin-bottom: 2em;
-}
-
 .position-nr {
   margin-bottom: 0.5em;
   font-size: 90%;
+  font-weight: bold;
+}
+
+.position-actions {
+  float: right;
+  margin-top: -7px;
+  margin-bottom: 5px;
+}
+
+.mat-divider {
+  margin: 1em 0 1.5em;
 }
