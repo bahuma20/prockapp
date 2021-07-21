@@ -44,6 +44,12 @@ tr.example-element-row:not(.example-expanded-row):active {
   }
 }
 
+.mat-column-actions .mat-icon-button {
+  width: 30px;
+  height: 28px;
+  line-height: 28px;
+}
+
 .add-button {
   margin-top: .5em;
 }

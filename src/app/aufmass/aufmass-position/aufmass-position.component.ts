@@ -22,7 +22,7 @@ export class AufmassPositionComponent implements OnInit {
   @Input()
   value: AufmassPosition
 
-  columnsToDisplay = ['label', 'count', 'dimensions', 'messgehalt'];
+  columnsToDisplay = ['label', 'count', 'dimensions', 'messgehalt', 'actions'];
 
   expandedElement: AufmassRow | null;
 
@@ -89,6 +89,12 @@ export class AufmassPositionComponent implements OnInit {
     };
     this.value.rows.push(newRow);
     this.expandedElement = newRow;
+    this.table.renderRows();
+  }
+
+  deleteRow(i) {
+    this.value.rows.splice(i, 1);
+    this.expandedElement = null;
     this.table.renderRows();
   }
 }
