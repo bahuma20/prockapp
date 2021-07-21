@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AufmassPosition, AufmassRow} from '../Aufmass.model';
 import * as math from 'mathjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { formatDimensions } from '../shared';
+import {MatTable} from '@angular/material/table';
 
 @Component({
   selector: 'app-aufmass-position',
@@ -23,7 +24,9 @@ export class AufmassPositionComponent implements OnInit {
 
   columnsToDisplay = ['label', 'count', 'dimensions', 'messgehalt'];
 
-  expandedElement: AufmassPosition | null;
+  expandedElement: AufmassRow | null;
+
+  @ViewChild(MatTable, {static: true}) table: MatTable<AufmassPosition>;
 
   constructor() { }
 
@@ -76,5 +79,16 @@ export class AufmassPositionComponent implements OnInit {
 
   hasError(row: AufmassRow) {
     return row.dimensions !== null && row.dimensions !== '' && this.calculateRow(row) === null
+  }
+
+  addRow() {
+    const newRow: AufmassRow = {
+      label: null,
+      dimensions: '',
+      type: 'add',
+    };
+    this.value.rows.push(newRow);
+    this.expandedElement = newRow;
+    this.table.renderRows();
   }
 }

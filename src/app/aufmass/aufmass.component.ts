@@ -55,9 +55,16 @@ export class AufmassComponent extends MaterialComponent {
     super.onChange();
   }
 
-  protected calculateRows() {
-    this.value.positions
-    this.rows = []
+  addPosition() {
+    this.value.positions.push({
+      rows: [
+        {
+          label: null,
+          dimensions: '',
+          type: 'add',
+        }
+      ]
+    })
   }
 }
 
