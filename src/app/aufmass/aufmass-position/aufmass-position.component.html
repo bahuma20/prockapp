@@ -44,7 +44,7 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
       <div class="example-element-detail"
            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-        <app-aufmass-row-edit [(row)]="element" (rowChange)="element = $event; onChange()"></app-aufmass-row-edit>
+        <app-aufmass-row-edit [row]="element" (rowChange)="element = $event; onChange()"></app-aufmass-row-edit>
 <!--        <div class="example-element-diagram">-->
 <!--          <div class="example-element-position"> {{element.position}} </div>-->
 <!--          <div class="example-element-symbol"> {{element.symbol}} </div>-->
