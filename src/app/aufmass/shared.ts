@@ -3,6 +3,9 @@ export function formatDimensions(dimensions: string): string {
     return '';
   }
 
+  dimensions = dimensions.replace(/\./g, ',')
+
+
   const allowedPunctuation = '+-*/()';
 
   allowedPunctuation.split('').forEach(item => {

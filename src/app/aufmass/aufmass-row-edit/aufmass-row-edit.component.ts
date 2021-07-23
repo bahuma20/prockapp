@@ -25,6 +25,11 @@ export class AufmassRowEditComponent implements OnInit {
     const cursorPosition = target.selectionStart;
 
     let value = target.value;
+
+    // Replace commas with dots
+    value = value.replace(/,/g, '.')
+
+    // Remove unwanted characters.
     let characters = value.split('');
 
     const strLenBefore = characters.length;
