@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AufmassPositionComponent } from './aufmass-position.component';
 
@@ -6,7 +6,7 @@ describe('AufmassPositionComponent', () => {
   let component: AufmassPositionComponent;
   let fixture: ComponentFixture<AufmassPositionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AufmassPositionComponent ]
     })
