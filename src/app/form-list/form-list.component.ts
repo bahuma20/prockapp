@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormStoreService} from '../form-store.service';
 import {Observable} from 'rxjs';
-import {ConnectionService} from 'ng-connection-service';
 
 @Component({
   selector: 'app-form-list',
@@ -11,7 +10,7 @@ import {ConnectionService} from 'ng-connection-service';
 export class FormListComponent implements OnInit {
   forms$: Observable<Array<object>>;
 
-  constructor(public formStore: FormStoreService, private connectionService: ConnectionService) { }
+  constructor(public formStore: FormStoreService) { }
 
   ngOnInit(): void {
     this.forms$ = this.formStore.getForms();

@@ -24,6 +24,7 @@ import {AufmassPositionComponent} from './aufmass/aufmass-position/aufmass-posit
 import { AufmassRowEditComponent } from './aufmass/aufmass-row-edit/aufmass-row-edit.component';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import {ConnectionServiceOptions, ConnectionServiceOptionsToken} from './connection.service';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,12 @@ import localeDe from '@angular/common/locales/de';
   providers: [
     FormStoreService,
     AuthService,
+    {
+      provide: ConnectionServiceOptionsToken,
+      useValue: {
+        enableHeartbeat: false,
+      } as ConnectionServiceOptions
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: [

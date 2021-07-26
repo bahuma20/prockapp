@@ -1,44 +1,51 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormStoreService} from '../form-store.service';
-import {ConnectionService} from 'ng-connection-service';
-import Submission from "../model/Submission";
+import Submission from '../model/Submission';
+import {ConnectionService} from '../connection.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-sync',
   templateUrl: './sync.component.html',
   styleUrls: ['./sync.component.scss']
 })
-export class SyncComponent implements OnInit {
+export class SyncComponent implements OnInit, OnDestroy {
 
   status = 'ONLINE';
   isConnected = true;
 
   forms: any[];
 
-  constructor(public formStore: FormStoreService, private connectionService: ConnectionService) {
-    this.connectionService.monitor().subscribe(isConnected => {
-      this.isConnected = isConnected;
-      if (this.isConnected) {
-        this.status = 'ONLINE';
-      }
-      else {
-        this.status = 'OFFLINE';
-      }
-    })
+  private connectionServiceSubscription: Subscription;
 
+  constructor(public formStore: FormStoreService, private connectionService: ConnectionService) {
     this.formStore.getForms().subscribe(forms => {
       this.forms = forms;
     });
   }
 
   ngOnInit() {
-    this.isConnected = navigator.onLine;
-    if (this.isConnected) {
-      this.status = 'ONLINE';
-    }
-    else {
-      this.status = 'OFFLINE';
-    }
+    this.connectionServiceSubscription = this.connectionService.monitor().subscribe(connectionState => {
+      this.isConnected = connectionState.hasNetworkConnection;
+      if (this.isConnected) {
+        this.status = 'ONLINE';
+      }
+      else {
+        this.status = 'OFFLINE';
+      }
+    });
+
+    // this.isConnected = navigator.onLine;
+    // if (this.isConnected) {
+    //   this.status = 'ONLINE';
+    // }
+    // else {
+    //   this.status = 'OFFLINE';
+    // }
+  }
+
+  ngOnDestroy() {
+    this.connectionServiceSubscription.unsubscribe();
   }
 
   signedCount(forms: any[], submissions: Submission[]) {
