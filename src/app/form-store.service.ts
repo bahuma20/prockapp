@@ -5,7 +5,7 @@ import {Plugins, StoragePlugin} from '@capacitor/core';
 import {Observable} from 'rxjs';
 import Submission from './model/Submission';
 import {APP_CONFIG, AppConfig} from './app-config.module';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {formatDate} from '@angular/common';
 
 @Injectable({

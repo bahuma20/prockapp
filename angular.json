@@ -56,6 +56,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -121,6 +125,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "prockapp"
+    }
+  },
+  "defaultProject": "prockapp",
+  "cli": {
+    "analytics": "a2c2cb69-89af-4950-b1d8-dc231aa36c2a"
+  }
 }

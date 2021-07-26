@@ -7,7 +7,7 @@ import {NavigationEnd, Router} from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  @ViewChild('mainContentInner', {static: false}) mainContentInner: ElementRef;
+  @ViewChild('mainContentInner') mainContentInner: ElementRef;
 
   constructor(public router: Router) {
   }
