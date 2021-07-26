@@ -17,21 +17,20 @@ export class FormEditComponent implements OnInit {
   constructor(private formStore: FormStoreService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      this.formStore.getForm(params.get('path'))
+    this.route.params.subscribe(params => {
+      this.formStore.getForm(params.path)
         .subscribe(form => {
           this.form = form;
 
-          const submission = this.formStore.getSubmissionByUuid(params.get('uuid'));
+          const submission = this.formStore.getSubmissionByUuid(params.uuid);
 
           if (submission) {
             this.submission = submission;
-            console.log(this.submission)
 
             this.updateDisplayedForm();
           }
         });
-    })
+    });
   }
 
   onSubmit(submission) {
@@ -43,7 +42,7 @@ export class FormEditComponent implements OnInit {
       });
       this.router.navigateByUrl('/form/' + this.form.path);
     }, error => {
-      this.snackBar.open('Fehler: Eintrag konnte nicht gespeichert werden!')
+      this.snackBar.open('Fehler: Eintrag konnte nicht gespeichert werden!');
     });
   }
 

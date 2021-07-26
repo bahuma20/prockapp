@@ -1,12 +1,11 @@
 import {Inject, Injectable} from '@angular/core';
 import {AuthService} from './auth.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Plugins, StoragePlugin} from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 import {Observable} from 'rxjs';
 import Submission from './model/Submission';
 import {APP_CONFIG, AppConfig} from './app-config.module';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {formatDate} from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +18,10 @@ export class FormStoreService {
   public unsignedSubmissions: Submission[] = [];
   public uploadRunning = false;
 
-  storage: StoragePlugin;
-
   constructor(private auth: AuthService,
               private http: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,
               private snackBar: MatSnackBar) {
-    this.storage = Plugins.Storage;
 
     this.getForms()
       .subscribe(forms => this.forms = forms);
@@ -37,14 +33,14 @@ export class FormStoreService {
   sync() {
     this.snackBar.open('Daten werden übertragen...', null, {
       duration: 2000
-    })
+    });
     this.syncForms();
     this.syncSubmissions();
   }
 
   storeSubmission(submission: Submission): Observable<any> {
     return new Observable<any>(observer => {
-      this.storage.get({
+      Storage.get({
         key: 'submissions',
       }).then(data => {
         let submissions = JSON.parse(data.value);
@@ -55,7 +51,7 @@ export class FormStoreService {
 
         submissions.push(submission);
 
-        return this.storage.set({
+        return Storage.set({
           key: 'submissions',
           value: JSON.stringify(submissions),
         });
@@ -77,7 +73,7 @@ export class FormStoreService {
         data[form.path] = form;
       });
 
-      this.storage.set({
+      Storage.set({
         key: 'forms',
         value: JSON.stringify(data),
       }).then(() => {
@@ -90,7 +86,7 @@ export class FormStoreService {
 
   getForms(): Observable<Array<object>> {
     return new Observable<any>(observer => {
-      this.storage.get({
+      Storage.get({
         key: 'forms',
       }).then(data => {
         let forms: object = JSON.parse(data.value);
@@ -111,7 +107,7 @@ export class FormStoreService {
 
   getForm(path: string): Observable<any> {
     return new Observable<any>(observer => {
-      this.storage.get({
+      Storage.get({
         key: 'forms',
       }).then(data => {
         let forms: object = JSON.parse(data.value);
@@ -147,7 +143,7 @@ export class FormStoreService {
             .subscribe(success => {
               this.getForms().subscribe(forms => this.forms = forms);
             }, error => {
-              console.error(error)
+              console.error(error);
             });
         });
       });
@@ -175,13 +171,13 @@ export class FormStoreService {
           headers: new HttpHeaders({
             'x-jwt-token': jwt,
           })
-        })
+        });
       } else {
         request = this.http.post(this.config.apiEndpoint + '/' + submission.formPath + '/submission', submissionData, {
           headers: new HttpHeaders({
             'x-jwt-token': jwt,
           })
-        })
+        });
       }
 
       request.subscribe(data => {
@@ -200,7 +196,7 @@ export class FormStoreService {
       });
     }, error => {
       console.error(error);
-    })
+    });
   }
 
   submissionUploadFinished() {
@@ -211,7 +207,7 @@ export class FormStoreService {
 
     let message = 'Übertragung abgeschlossen.';
     if (this.failedSubmissions.length > 0) {
-      message += ' Bei ' + this.failedSubmissions.length + ' ' + (this.failedSubmissions.length === 1 ? 'Eintrag' : 'Einträgen') + ' ist ein Fehler aufgetreten!'
+      message += ' Bei ' + this.failedSubmissions.length + ' ' + (this.failedSubmissions.length === 1 ? 'Eintrag' : 'Einträgen') + ' ist ein Fehler aufgetreten!';
     }
 
     this.submissions = this.failedSubmissions;
@@ -234,7 +230,7 @@ export class FormStoreService {
 
   getSubmissions(form: string = null): Observable<Submission[]> {
     return new Observable<Submission[]>(observer => {
-      this.storage.get({
+      Storage.get({
         key: 'submissions',
       }).then(data => {
         if (!data.value) {
@@ -243,23 +239,23 @@ export class FormStoreService {
 
         let submissions: Submission[] = JSON.parse(data.value);
 
-        if (form) {
+        if (form !== null) {
           submissions = submissions.filter(item => {
             return item.formId === form;
           });
         }
 
-        observer.next(submissions);
+        observer.next(submissions.splice(0));
       }).catch(error => {
         console.error(error);
         observer.error(error);
       });
-    })
+    });
   }
 
   private storeSubmissions(submissions: Submission[]) {
     return new Observable(observer => {
-      this.storage.set({
+      Storage.set({
         key: 'submissions',
         value: JSON.stringify(submissions),
       }).then(() => {
@@ -306,7 +302,7 @@ export class FormStoreService {
           observer.next();
         }, error => {
           observer.error(error);
-        })
+        });
     });
   }
 

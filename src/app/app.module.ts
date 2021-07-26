@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { MatFormioModule } from 'angular-material-formio';
@@ -26,6 +26,7 @@ import { AufmassRowEditComponent } from './aufmass/aufmass-row-edit/aufmass-row-
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import {ConnectionServiceOptions, ConnectionServiceOptionsToken} from './connection.service';
+import {MigrationService} from './migration.service';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,13 @@ import {ConnectionServiceOptions, ConnectionServiceOptionsToken} from './connect
       useValue: {
         enableHeartbeat: false,
       } as ConnectionServiceOptions
+    },
+    MigrationService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (ms: MigrationService) => () => ms.run(),
+      deps: [MigrationService],
+      multi: true
     }
   ],
   bootstrap: [AppComponent],

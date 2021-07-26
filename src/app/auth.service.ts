@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Plugins, StoragePlugin} from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 import {APP_CONFIG, AppConfig} from './app-config.module';
 import {JwtHelperService} from '@auth0/angular-jwt';
 
@@ -10,10 +10,8 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 })
 export class AuthService {
 
-  storage: StoragePlugin;
 
   constructor(private http: HttpClient, @Inject(APP_CONFIG) private config: AppConfig) {
-    this.storage = Plugins.Storage;
   }
 
   login(email: string, password: string): Observable<any> {
@@ -25,28 +23,28 @@ export class AuthService {
         },
       }).subscribe((data: any) => {
         Promise.all([
-          this.storage.set({
+          Storage.set({
             key: 'auth_email',
             value: email,
           }),
-          this.storage.set({
+          Storage.set({
             key: 'auth_password',
             value: password,
           })
         ]).then(() => {
           observer.next();
-        })
+        });
 
         }, error => {
         console.error(error);
         observer.error(error);
-      })
+      });
     });
   }
 
   getJwt(): Observable<string> {
     return new Observable<string>(observer => {
-      this.storage.get({
+      Storage.get({
         key: 'auth_jwt'
       }).then(data => {
         if (!data.value) {
@@ -55,7 +53,7 @@ export class AuthService {
               observer.next(jwt);
             }, error => {
               observer.error(error);
-            })
+            });
         } else {
           const jwt = data.value;
           const helper = new JwtHelperService();
@@ -94,7 +92,7 @@ export class AuthService {
 
   private storeJwt(jwt: string): Observable<any> {
     return new Observable<any>(observer => {
-      this.storage.set({
+      Storage.set({
         key: 'auth_jwt',
         value: jwt,
       }).then(() => {
@@ -102,16 +100,16 @@ export class AuthService {
       }).catch(error => {
         observer.error(error);
       });
-    })
+    });
   }
 
   private authenticate(): Observable<HttpResponse<any>> {
     return new Observable<HttpResponse<any>>(observer => {
       Promise.all([
-        this.storage.get({
+        Storage.get({
           key: 'auth_email',
         }),
-        this.storage.get({
+        Storage.get({
           key: 'auth_password',
         }),
       ]).then(values => {

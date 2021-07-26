@@ -3,7 +3,7 @@ import {FormStoreService} from '../form-store.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as uuid from 'uuid';
-import {formatDate} from "@angular/common";
+import {formatDate} from '@angular/common';
 
 @Component({
   selector: 'app-form-detail',
@@ -17,13 +17,13 @@ export class FormDetailComponent implements OnInit {
   constructor(private formStore: FormStoreService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.formStore.getForm(params.get('path'))
+    this.route.params.subscribe(params => {
+      this.formStore.getForm(params.path)
         .subscribe(form => {
           this.form = form;
           this.updateDisplayedForm();
         });
-    })
+    });
   }
 
   onSubmit(submission) {
@@ -41,11 +41,11 @@ export class FormDetailComponent implements OnInit {
       });
       this.router.navigateByUrl('/form/' + this.form.path);
     }, error => {
-      console.error(error)
+      console.error(error);
       this.snackBar.open('Beim Speichern ist ein Fehler aufgetreten. Starten Sie die App neu.', null, {
         duration: 5000
       });
-    })
+    });
   }
 
   private updateDisplayedForm() {
