@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormStoreService} from '../form-store.service';
+import {FormStoreService} from '../services/form-store.service.js';
 import Submission from '../model/Submission';
-import {ConnectionService} from '../connection.service';
+import {ConnectionService} from '../services/connection.service.js';
 import {Subscription} from 'rxjs';
 
 @Component({

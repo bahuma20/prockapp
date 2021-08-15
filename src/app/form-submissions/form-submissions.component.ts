@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {FormStoreService} from "../form-store.service";
+import {FormStoreService} from "../services/form-store.service.js";
 import Submission from "../model/Submission";
 import {BehaviorSubject} from "rxjs";
-import {FormValueFormatterService} from "../form-value-formatter.service";
+import {FormValueFormatterService} from "../services/form-value-formatter.service.js";
 
 interface Column {
   key: string,

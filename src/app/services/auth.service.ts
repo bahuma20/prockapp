@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import { Storage } from '@capacitor/storage';
-import {APP_CONFIG, AppConfig} from './app-config.module';
+import {APP_CONFIG, AppConfig} from '../app-config.module.js';
 import {JwtHelperService} from '@auth0/angular-jwt';
 
 @Injectable({

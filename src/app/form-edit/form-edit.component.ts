@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Submission from '../model/Submission';
-import {FormStoreService} from '../form-store.service';
+import {FormStoreService} from '../services/form-store.service.js';
 import {ActivatedRoute, Router} from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

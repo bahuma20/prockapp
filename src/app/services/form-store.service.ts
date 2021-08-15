@@ -1,10 +1,10 @@
 import {Inject, Injectable} from '@angular/core';
-import {AuthService} from './auth.service';
+import {AuthService} from './auth.service.js';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Storage } from '@capacitor/storage';
 import {Observable} from 'rxjs';
-import Submission from './model/Submission';
-import {APP_CONFIG, AppConfig} from './app-config.module';
+import Submission from '../model/Submission.js';
+import {APP_CONFIG, AppConfig} from '../app-config.module.js';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({

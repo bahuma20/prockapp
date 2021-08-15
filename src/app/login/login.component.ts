@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../auth.service';
+import {AuthService} from '../services/auth.service.js';
 import {Router} from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

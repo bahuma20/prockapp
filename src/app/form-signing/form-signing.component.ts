@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormStoreService} from '../form-store.service';
+import {FormStoreService} from '../services/form-store.service.js';
 import Submission from '../model/Submission';
-import {FormValueFormatterService} from '../form-value-formatter.service';
+import {FormValueFormatterService} from '../services/form-value-formatter.service.js';
 import {formatDate} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
 

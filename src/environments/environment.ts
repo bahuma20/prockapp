@@ -2,9 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import {Environment} from './EnvironmentInterface.js';
+
+export const environment: Environment = {
   production: false,
   apiEndpoint: 'https://formio.prock.apps.bahuma.io',
+  backendEndpoint: 'https://backend.prock.apps.bahuma.io/api',
   formTags: [
     'prockapp',
     'prockappdev',

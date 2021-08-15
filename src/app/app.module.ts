@@ -9,8 +9,8 @@ import {AppRoutingModule} from './app-routing.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {FormStoreService} from './form-store.service';
-import {AuthService} from './auth.service';
+import {FormStoreService} from './services/form-store.service.js';
+import {AuthService} from './services/auth.service.js';
 import { LoginComponent } from './login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -25,8 +25,8 @@ import {AufmassPositionComponent} from './aufmass/aufmass-position/aufmass-posit
 import { AufmassRowEditComponent } from './aufmass/aufmass-row-edit/aufmass-row-edit.component';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
-import {ConnectionServiceOptions, ConnectionServiceOptionsToken} from './connection.service';
-import {MigrationService} from './migration.service';
+import {ConnectionServiceOptions, ConnectionServiceOptionsToken} from './services/connection.service.js';
+import {MigrationService} from './services/migration.service.js';
 
 @NgModule({
   declarations: [
@@ -78,6 +78,15 @@ import {MigrationService} from './migration.service';
     AufmassComponent,
   ]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist()
+        .then(isPersisted => {
+          console.log(`Persisted storage granted: ${isPersisted}`);
+        });
+    }
+  }
+}
 
 registerLocaleData(localeDe);
